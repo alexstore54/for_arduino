@@ -26,6 +26,23 @@ class Controller {
             console.log(e);
         }
     }
+
+    async getJSON(req, res, next) {
+        try {
+            const dataFilePath = path.join(__dirname, 'weight_data.json');
+
+            if (fs.existsSync(dataFilePath)) {
+                const rawData = fs.readFileSync(dataFilePath);
+                const fileData = JSON.parse(rawData);
+                res.status(200).json(fileData);
+            } else {
+                res.status(404).send('File not found');
+            }
+        } catch (e) {
+            console.error(e);
+            res.status(500).send('An error occurred');
+        }
+    }
 }
 
 module.exports = new Controller()
